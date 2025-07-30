@@ -1,12 +1,121 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <link rel="icon" type="image/svg+xml" href="" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <title>ReadingGate PreK Study</title>
+
+    <!-- 폰트 preload - 가장 중요한 폰트부터 -->
+    <link
+      rel="preload"
+      href="/src/assets/fonts/SDGdGulimTTF.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/fonts/SDRGGothicNeoRoundTTF-aRg.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/fonts/SDRGGothicNeoRoundTTF-bBd.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+
+    <!-- 중요한 공통 이미지 preload - Safari 깜빡거림 방지를 위해 -->
+    <link
+      rel="preload"
+      href="/src/assets/temp/common/button/btn-play-sound.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/common/button/btn-start.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/common/button/btn-close-quiz-modal.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/common/question-bg/question-bg-long.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/common/question-bg/question-bg-short.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/common/correction-mark/correction-correct-mark-front.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/common/correction-mark/correction-incorrect-mark-front.png"
+      as="image"
+    />
+
+    <!-- 기본 테마(baro) 중요 이미지 preload -->
+    <link
+      rel="preload"
+      href="/src/assets/temp/theme/baro/quiz/quiz-bg.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/theme/baro/theme01/baro.svg"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/theme/baro/theme01/bg01.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/theme/baro/theme01/step1.png"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="/src/assets/temp/theme/baro/theme01/step-movie.png"
+      as="image"
+    />
+
+    <!-- CSS 파일 preload -->
+    <link rel="preload" href="/src/index.css" as="style" />
+
+    <!-- 성능 최적화를 위한 힌트 -->
+    <link rel="dns-prefetch" href="//wcfresource.a1edu.com" />
+    <link rel="preconnect" href="//wcfresource.a1edu.com" />
+
+    <!-- Safari 특정 최적화 -->
+    <meta name="apple-touch-icon-precomposed" content="" />
+    <meta name="msapplication-TileImage" content="" />
   </head>
-  <body>
+  <body style="width: 100%">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

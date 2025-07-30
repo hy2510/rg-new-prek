@@ -1,5 +1,299 @@
+/* 폰트 정의 */
+@font-face {
+  font-family: 'SDRG Gothic Neo Round';
+  src: url('./assets/fonts/SDRGGothicNeoRoundTTF-aRg.woff2') format('woff2'),
+    url('./assets/fonts/SDRGGothicNeoRoundTTF-aRg.woff') format('woff'),
+    url('./assets/fonts/SDRGGothicNeoRoundTTF-aRg.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SDRG Gothic Neo Round Bold';
+  src: url('./assets/fonts/SDRGGothicNeoRoundTTF-bBd.woff2') format('woff2'),
+    url('./assets/fonts/SDRGGothicNeoRoundTTF-bBd.woff') format('woff'),
+    url('./assets/fonts/SDRGGothicNeoRoundTTF-bBd.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SDGd Gulim';
+  src: url('./assets/fonts/SDGdGulimTTF.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 반응형 폰트 크기 */
+@media screen and (max-width: 375px) {
+  body {
+    font-size: 15px;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'SDGd Gulim', Inter, system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
+}
+
+input:focus {
+  outline: none;
+}
+
+* {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  font-size: 18px;
+  min-height: 100vh;
+  background-color: #1a1a1a;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+button,
+a,
+img,
+div {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+svg {
+  will-change: transform, opacity;
+}
+
+/* === Safari 깜빡거림 방지를 위한 이미지 최적화 스타일 === */
+
+/* 모든 이미지에 대한 기본 최적화 설정 */
+img {
+  /* 이미지 렌더링 품질 향상 */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+
+  /* 하드웨어 가속 활성화 */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform, opacity;
+
+  /* 깜빡거림 방지를 위한 백페이스 숨김 */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  /* 부드러운 전환을 위한 기본 트랜지션 */
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* 배경 이미지가 포함된 요소들에 대한 최적화 */
+[style*='background-image'] {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* 퀴즈나 게임 내 동적으로 변경되는 이미지들에 대한 추가 최적화 */
+.quiz-image,
+.step-image,
+.background-image,
+.character-image,
+.option-image {
+  /* Safari에서 이미지 교체 시 깜빡거림 방지 */
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  /* 이미지 로딩 시 부드러운 나타남 효과 */
+  opacity: 1;
+  transition: opacity 0.15s ease-in-out;
+}
+
+/* 이미지 로딩 중 상태 */
+.quiz-image.loading,
+.step-image.loading,
+.background-image.loading,
+.character-image.loading,
+.option-image.loading {
+  opacity: 0.8;
+}
+
+/* 버튼 이미지들에 대한 최적화 */
+button img,
+.button-image {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  /* 버튼 이미지는 더 빠른 전환 */
+  transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+}
+
+/* SVG 이미지들에 대한 추가 최적화 */
+svg,
+.svg-image {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* 애니메이션이 있는 요소들에 대한 성능 최적화 */
+.animated,
+.fade-in,
+.fade-out,
+.slide-in,
+.slide-out {
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Safari 특정 최적화 - Webkit 기반 브라우저에서만 적용 */
+@supports (-webkit-touch-callout: none) {
+  img,
+  [style*='background-image'] {
+    /* Safari에서 이미지 디코딩 최적화 */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+
+    /* 메모리 효율성을 위한 컴포지팅 레이어 제한 */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* Safari에서 배경 이미지 깜빡거림 방지 */
+  .background-container {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* 태블릿 전용 최적화 */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  /* 스케일 전환 시 부드러운 애니메이션 */
+  [style*='transform: scale'] {
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* 화면 회전 시 안정화를 위한 하드웨어 가속 */
+  #root {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* === SVG 애니메이션 최적화 === */
+
+/* SVG 이미지에 대한 전역 최적화 */
+svg,
+.svg-image,
+img[src*='.svg'] {
+  /* SVG 렌더링 품질 향상 */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimizeQuality;
+  shape-rendering: geometricPrecision;
+
+  /* 하드웨어 가속 활성화 */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  /* 부드러운 전환 */
+  transition: all 0.3s ease;
+}
+
+/* 결과 화면 완료 마크 특별 최적화 */
+.result-complete-mark {
+  /* 애니메이션 성능 최적화 */
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  /* SVG 렌더링 최적화 */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimizeQuality;
+  shape-rendering: geometricPrecision;
+
+  /* 애니메이션 부드러움 */
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+}
+
+/* Safari에서 SVG 애니메이션 최적화 */
+@supports (-webkit-touch-callout: none) {
+  svg,
+  img[src*='.svg'] {
+    /* Safari 전용 SVG 최적화 */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    /* Safari에서 SVG 품질 향상 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .result-complete-mark {
+    /* Safari 전용 애니메이션 최적화 */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* 애니메이션 성능 향상을 위한 전역 설정 */
+* {
+  /* 애니메이션 요소들에 대한 성능 힌트 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 고해상도 디스플레이에서 SVG 최적화 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  svg,
+  img[src*='.svg'] {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimizeQuality;
+  }
 }

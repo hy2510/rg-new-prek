@@ -1,0 +1,15 @@
+{
+  "record": {
+    "hosts": [
+      "localhost",
+      "127.0.0.1",
+      "192.168.0.200",
+      "0.0.0.0"
+    ],
+    "hash": {
+      "key": "27fd82fa9d2dbb0c784ffef47cf3ff71cb2fc72144a7dcc184e77e0525bb6041",
+      "cert": "796407467aa562f19a076590aea812fecd0d13c9123a8dd34168c98316c1f1dc"
+    }
+  },
+  "configFilePath": "/Users/hoyour/github/rg-new-prek/certs/config.json"
+}
