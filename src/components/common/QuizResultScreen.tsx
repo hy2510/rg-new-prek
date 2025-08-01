@@ -1,22 +1,23 @@
-import styled, { keyframes } from 'styled-components'
-import { ThemeType, ThemeNumber } from '@utils/SoundManager'
-import { IMAGES } from '@utils/ImageManager'
-import QuizContainer, { QuizBody } from '@components/common/QuizContainer'
 import React from 'react'
+import styled, { keyframes } from 'styled-components'
+import { Images } from '@utils/Assets'
+import { ThemeType } from '@interfaces/IThemeType'
+
+import QuizContainer, { QuizBody } from '@components/common/QuizContainer'
 
 interface QuizResultScreenProps {
   title?: string
   resultText?: string
   theme: ThemeType
-  themeNumber: ThemeNumber
+  themeNumber: number
   children?: React.ReactNode
   customStyles?: React.CSSProperties
-  onClose?: () => void
   showRibbon?: boolean
   showCharacter?: boolean
   showCompleteMark?: boolean
   characterSize?: number
   completeMarkSize?: number
+  onClose?: () => void
 }
 
 /**
@@ -37,8 +38,8 @@ export default function QuizResultScreen({
 }: QuizResultScreenProps) {
   const AnimatedCompleteMark = () => {
     const completeMark = showRibbon
-      ? IMAGES.common.resultCompleteMark
-      : IMAGES.common.resultCompleteMarkNoRebon
+      ? Images.Common.CompleteMark.completeReebon
+      : Images.Common.CompleteMark.completeNoReebon
 
     return (
       <object
@@ -54,7 +55,7 @@ export default function QuizResultScreen({
 
   return (
     <QuizContainer
-      bgImage={IMAGES.theme[theme].quiz.background.quizBg}
+      bgImage={Images.Theme[theme].Quiz.quizBg}
       quizTitle={title}
       theme={theme}
       themeNumber={themeNumber}
@@ -71,7 +72,7 @@ export default function QuizResultScreen({
             <CharacterContainer size={characterSize}>
               <div className="wrapper">
                 <CharacterImage
-                  src={IMAGES.theme[theme].quiz.character.completeCharacter}
+                  src={Images.Theme[theme].Quiz.completeCharacter}
                   alt={`${theme} 캐릭터`}
                 />
               </div>

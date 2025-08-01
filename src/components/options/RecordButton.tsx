@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled from 'styled-components'
 
 interface RecordButtonProps {
@@ -28,7 +28,7 @@ export default function RecordButton({
         <RecordRecButton
           progress={progress}
           onClick={handleRecordClick}
-          $isRecording={isRecording}
+          isRecording={isRecording}
         />
       ) : (
         <RecordReadyButton onClick={handleRecordClick} />
@@ -56,7 +56,7 @@ const RecordButtonContainer = styled.div`
 const RecordReadyButton = styled.div`
   width: 100px;
   height: 100px;
-  background-image: url(${IMAGES.common.button.recordReady});
+  background-image: url(${Images.Common.Button.btnRecordReady});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -68,10 +68,10 @@ const RecordReadyButton = styled.div`
   }
 `
 
-const RecordRecButton = styled.div<{ progress: number; $isRecording: boolean }>`
+const RecordRecButton = styled.div<{ progress: number; isRecording: boolean }>`
   width: 100px;
   height: 100px;
-  background-image: url(${IMAGES.common.button.recordRec});
+  background-image: url(${Images.Common.Button.btnRecordRec});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -111,9 +111,9 @@ const RecordRecButton = styled.div<{ progress: number; $isRecording: boolean }>`
     height: 120%;
     background-color: rgba(170, 0, 0, 0.85);
     border-radius: 50%;
-    animation: ${({ $isRecording }) =>
-      $isRecording ? 'ping 1.5s ease-in-out infinite both' : 'none'};
-    opacity: ${({ $isRecording }) => ($isRecording ? 1 : 0)};
+    animation: ${({ isRecording }) =>
+      isRecording ? 'ping 1.5s ease-in-out infinite both' : 'none'};
+    opacity: ${({ isRecording }) => (isRecording ? 1 : 0)};
 
     @keyframes ping {
       0% {
@@ -138,7 +138,7 @@ const RecordRecButton = styled.div<{ progress: number; $isRecording: boolean }>`
 const RecordPlayButton = styled.div`
   width: 100px;
   height: 100px;
-  background-image: url(${IMAGES.common.button.recordPlay});
+  background-image: url(${Images.Common.Button.btnRecordPlay});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -152,7 +152,7 @@ const RecordPlayButton = styled.div`
 const RecordNextButton = styled.div`
   width: 100px;
   height: 100px;
-  background-image: url(${IMAGES.common.button.recordNext});
+  background-image: url(${Images.Common.Button.btnRecordNext});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

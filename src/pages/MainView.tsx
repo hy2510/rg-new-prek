@@ -1,13 +1,15 @@
-import styled from 'styled-components'
-import 'animate.css'
 import { useEffect, useRef } from 'react'
-import { IMAGES } from '@utils/ImageManager'
-import { ThemeType, ThemeNumber, SoundManager } from '@utils/SoundManager'
+
+import styled from 'styled-components'
+import { Images } from '@utils/Assets'
+import 'animate.css'
+
+import { ThemeType } from '@interfaces/IThemeType'
 
 type MainViewProps = {
   step?: number
   theme?: ThemeType
-  themeNumber?: ThemeNumber
+  themeNumber?: number
   currentStep?: number
   totalSteps?: number
   onStepChange?: (stepNumber: number) => void
@@ -34,7 +36,7 @@ const BACKGROUND_ANIMATIONS: Record<string, BackgroundAnimationConfig> = {
  */
 export default function MainView({
   step,
-  theme = 'baro',
+  theme = 'Baro',
   themeNumber = 1,
   currentStep = 0,
   totalSteps = 5,
@@ -52,8 +54,8 @@ export default function MainView({
 
   // 사용자 상호작용 시 오디오 활성화 및 배경음악 재생
   const handleUserInteraction = () => {
-    SoundManager.enableAudio()
-    SoundManager.playBackgroundMusic(theme, themeNumber)
+    // SoundManager.enableAudio()
+    // SoundManager.playBackgroundMusic(theme, themeNumber)
   }
 
   // 스텝 변경 시 호출되는 함수
@@ -101,14 +103,14 @@ export default function MainView({
   const getBackgroundImage = (
     bgName: 'bg01' | 'bg02' | 'bg03' | 'bg04' | 'bg05',
   ) => {
-    const themeKey = `theme0${themeNumber}` as const
-    return IMAGES.theme[theme][themeKey].background[bgName]
+    const themeAssets = (Images.Theme as any)[theme][`Theme0${themeNumber}`]
+    return themeAssets[bgName]
   }
 
   // 테마별 캐릭터 이미지 경로 생성
   const getCharacterImage = () => {
-    const themeKey = `theme0${themeNumber}` as const
-    return IMAGES.theme[theme][themeKey].character[theme]
+    const themeAssets = (Images.Theme as any)[theme][`Theme0${themeNumber}`]
+    return themeAssets[theme.toLowerCase()]
   }
 
   // 스텝 상태에 따른 CSS 클래스명 결정
@@ -248,7 +250,7 @@ const StepIndicatorContainer = styled.div`
     .step-indicator-item {
       width: 30px;
       height: 30px;
-      background-image: url(${IMAGES.common.stepIndicator.stepNumberBg});
+      background-image: url(${Images.Common.StepIndicator.stepNumberBg});
       background-size: 100% 100%;
       background-repeat: no-repeat;
       color: #303030;
@@ -265,15 +267,15 @@ const StepIndicatorContainer = styled.div`
       transition: transform 0.2s ease;
 
       &.step-movie-mark {
-        background-image: url(${IMAGES.common.stepIndicator.stepMovieMark});
+        background-image: url(${Images.Common.StepIndicator.stepMovieMark});
       }
 
       &.step-current-mark {
-        background-image: url(${IMAGES.common.stepIndicator.stepCurrentMark});
+        background-image: url(${Images.Common.StepIndicator.stepCurrentMark});
       }
 
       &.step-completed-mark {
-        background-image: url(${IMAGES.common.stepIndicator.stepCompletedMark});
+        background-image: url(${Images.Common.StepIndicator.stepCompletedMark});
       }
     }
   }

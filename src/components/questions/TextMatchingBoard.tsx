@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { CardItem, GamePhase } from '@hooks/useCardMatchingLogic'
-import { IMAGES } from '@utils/ImageManager'
-import { ThemeType } from '@utils/SoundManager'
+import { Images } from '@utils/Assets'
+import { ThemeType } from '@interfaces/IThemeType'
 
 interface TextMatchingBoardProps {
   cards: CardItem[]
@@ -19,9 +19,9 @@ export default function TextMatchingBoard({
       {cards.map((card) => (
         <Card
           key={card.id}
-          $isFlipped={card.isFlipped}
-          $isMatched={card.isMatched}
-          $theme={theme}
+          isFlipped={card.isFlipped}
+          isMatched={card.isMatched}
+          theme={theme}
           data-flipped={card.isFlipped}
           data-matched={card.isMatched}
           onClick={() => onCardClick(card.id)}
@@ -56,19 +56,19 @@ const TextMatchingBoardContainer = styled.div`
 `
 
 const Card = styled.div<{
-  $isFlipped: boolean
-  $isMatched: boolean
-  $theme: ThemeType
+  isFlipped: boolean
+  isMatched: boolean
+  theme: ThemeType
 }>`
   position: relative;
   width: 100%;
   height: 100%;
-  cursor: ${({ $isMatched }) => ($isMatched ? 'default' : 'pointer')};
+  cursor: ${({ isMatched }) => (isMatched ? 'default' : 'pointer')};
   perspective: 1000px;
   transition: transform 0.3s ease;
 
   &:hover {
-    transform: ${({ $isMatched }) => ($isMatched ? 'scale(1)' : 'scale(1.05)')};
+    transform: ${({ isMatched }) => (isMatched ? 'scale(1)' : 'scale(1.05)')};
 
     @media (pointer: coarse) {
       transform: scale(1);
@@ -76,7 +76,7 @@ const Card = styled.div<{
   }
 
   &:active {
-    transform: ${({ $isMatched }) => ($isMatched ? 'scale(1)' : 'scale(0.95)')};
+    transform: ${({ isMatched }) => (isMatched ? 'scale(1)' : 'scale(0.95)')};
   }
 `
 
@@ -85,7 +85,7 @@ const CardFront = styled.div`
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background-image: url(${IMAGES.theme.baro.quiz.options.optionCardFront});
+  background-image: url(${Images.Theme.Baro.Quiz.optionCardFront});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -112,7 +112,7 @@ const CardBack = styled.div`
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background-image: url(${IMAGES.theme.baro.quiz.options.optionCardBack});
+  background-image: url(${Images.Theme.Baro.Quiz.optionCardBack});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

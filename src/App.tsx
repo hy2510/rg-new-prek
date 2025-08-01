@@ -1,8 +1,12 @@
-import React, { Suspense, useEffect, useRef } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
+
 import AppContextProvider, { useAppContext } from '@contexts/AppContext'
+import { SoundProvider } from '@contexts/SoundContext'
+
+import { AssetsManager } from '@utils/AssetsManager'
+import { ThemeType } from '@interfaces/IThemeType'
+
 import LoadingScreen from '@components/common/LoadingScreen'
-import { ImageManager } from '@utils/ImageManager'
-import { SoundManager } from '@utils/SoundManager'
 
 const MainContainer = React.lazy(
   () => import('@pages/containers/MainContainer'),
@@ -16,6 +20,12 @@ function AppContent() {
     setLoadingProgress,
     updateLoadingProgress,
   } = useAppContext()
+
+  // DB에서 받아올 theme 정보 상태
+  const [themeInfo, setThemeInfo] = useState<{
+    theme: ThemeType
+    themeNumber: number
+  }>({ theme: 'Baro', themeNumber: 1 })
 
   // 한 번만 실행되도록 보장하는 ref
   const hasExecutedRef = useRef(false)
@@ -32,8 +42,27 @@ function AppContent() {
         console.log('안전한 프리로딩 시작...')
         setLoadingProgress(0)
 
+        // DB에서 theme 정보 가져오기 (예시)
+        const fetchThemeInfo = async () => {
+          try {
+            // 실제 DB 호출 로직으로 교체
+            // const response = await fetch('/api/theme-info')
+            // const data = await response.json()
+            // setThemeInfo({ theme: data.theme, themeNumber: data.themeNumber })
+
+            // 임시로 하드코딩된 값 사용
+            setThemeInfo({ theme: 'Baro', themeNumber: 1 })
+          } catch (error) {
+            console.error('Theme 정보 가져오기 실패:', error)
+            // 기본값 사용
+            setThemeInfo({ theme: 'Baro', themeNumber: 1 })
+          }
+        }
+
+        await fetchThemeInfo()
+
         // 이미지 프리로딩 (100% 할당)
-        await ImageManager.preloadImages((loaded, total) => {
+        await AssetsManager.preloadCommonImages((loaded, total) => {
           const imageProgress = (loaded / total) * 100
           setLoadingProgress(imageProgress)
           if (process.env.NODE_ENV === 'development') {
@@ -51,8 +80,8 @@ function AppContent() {
           console.log('로딩 스크린 해제됨')
 
           // 백그라운드에서 사운드 프리로딩 시작 (한 번만 실행)
-          if (!SoundManager.isCurrentlyPreloading()) {
-            SoundManager.preloadSounds((loaded, total) => {
+          if (!AssetsManager.isCurrentlyPreloading()) {
+            AssetsManager.preloadCommonSounds((loaded, total) => {
               if (process.env.NODE_ENV === 'development') {
                 console.log(`백그라운드 사운드 로딩: ${loaded}/${total}`)
               }
@@ -80,11 +109,13 @@ function AppContent() {
   return (
     <>
       <LoadingScreen progress={loadingProgress} isVisible={isLoading} />
-      {!isLoading && (
-        <Suspense fallback={''}>
-          <MainContainer />
-        </Suspense>
-      )}
+
+      <SoundProvider
+        initialTheme={themeInfo.theme}
+        initialThemeNumber={themeInfo.themeNumber}
+      >
+        <Suspense fallback={''}>{!isLoading && <MainContainer />}</Suspense>
+      </SoundProvider>
     </>
   )
 }

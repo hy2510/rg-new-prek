@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
+
 import styled from 'styled-components'
-import { SoundManager } from '@utils/SoundManager'
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
+import { useSounds } from '@hooks/useSounds'
 
 interface PlayAudioButtonProps {
   isVisible?: boolean
   audioLetter?: string
-  questionType?: keyof (typeof SoundManager)['QUESTION_SOUNDS_BASE']
+  questionType?: string
   className?: string
 }
 
@@ -16,13 +17,17 @@ export default function PlayAudioButton({
   questionType,
   className,
 }: PlayAudioButtonProps) {
+  const { playAudioLetter, isAudioLetterPlaying } = useSounds()
   const [isPlaying, setIsPlaying] = useState(false)
 
-  // SoundManager 재생 상태 구독
   useEffect(() => {
-    const unsubscribe = SoundManager.addPlayingStateListener(setIsPlaying)
-    return unsubscribe
+    playAudioLetter(audioLetter)
   }, [])
+
+  // isAudioLetterPlaying 상태를 isPlaying에 반영
+  useEffect(() => {
+    setIsPlaying(isAudioLetterPlaying)
+  }, [isAudioLetterPlaying])
 
   // props 변경 시 재생 상태 초기화
   useEffect(() => {
@@ -30,15 +35,15 @@ export default function PlayAudioButton({
   }, [audioLetter, questionType])
 
   const handlePlayAudio = useCallback(() => {
-    const finalQuestionType = questionType || 'default'
-    SoundManager.playQuestionSound(finalQuestionType, audioLetter)
-  }, [audioLetter, questionType])
+    console.log('PlayAudioButton 클릭됨:', audioLetter)
+    playAudioLetter(audioLetter)
+  }, [audioLetter, playAudioLetter])
 
   return (
     <PlayAudioButtonContainer
       className={className}
-      $isVisible={isVisible}
-      $isPlaying={isPlaying}
+      isVisible={isVisible}
+      isPlaying={isPlaying}
       onClick={handlePlayAudio}
       disabled={isPlaying}
     />
@@ -46,8 +51,8 @@ export default function PlayAudioButton({
 }
 
 const PlayAudioButtonContainer = styled.button<{
-  $isVisible: boolean
-  $isPlaying: boolean
+  isVisible: boolean
+  isPlaying: boolean
 }>`
   position: absolute;
   top: 100px;
@@ -56,20 +61,20 @@ const PlayAudioButtonContainer = styled.button<{
   height: 80px;
   border: none;
   background: transparent;
-  background-image: ${({ $isPlaying }) =>
-    $isPlaying
-      ? `url(${IMAGES.common.button.stopSoundButton})`
-      : `url(${IMAGES.common.button.playSoundButton})`};
+  background-image: ${({ isPlaying }) =>
+    isPlaying
+      ? `url(${Images.Common.Button.btnStopSound})`
+      : `url(${Images.Common.Button.btnPlaySound})`};
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  cursor: ${({ $isPlaying }) => ($isPlaying ? 'not-allowed' : 'pointer')};
+  cursor: ${({ isPlaying }) => (isPlaying ? 'not-allowed' : 'pointer')};
   z-index: 10;
-  opacity: ${({ $isVisible, $isPlaying }) => {
-    if (!$isVisible) return 0
-    return $isPlaying ? 0.5 : 1
+  opacity: ${({ isVisible, isPlaying }) => {
+    if (!isVisible) return 0
+    return isPlaying ? 0.5 : 1
   }};
-  transform: ${({ $isVisible }) =>
-    $isVisible ? 'translateY(0)' : 'translateY(20px)'};
+  transform: ${({ isVisible }) =>
+    isVisible ? 'translateY(0)' : 'translateY(20px)'};
   transition: opacity 500ms ease-in-out, transform 500ms ease-in-out;
 `

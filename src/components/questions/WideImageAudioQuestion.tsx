@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled from 'styled-components'
 
 interface WideImageAudioQuestionProps {
@@ -8,34 +8,34 @@ interface WideImageAudioQuestionProps {
 
 export default function WideImageAudioQuestion({
   imageUrl = 'https://wcfresource.a1edu.com/newsystem/image/dodoabc/sightword/words/whatsyourname.png',
-  containerBgImage = IMAGES.theme.baro.quiz.options.resShelfShort,
+  containerBgImage = Images.Theme.Baro.Quiz.resShelfShort,
 }: WideImageAudioQuestionProps) {
   return (
-    <WideImageAudioQuestionContainer $bgImage={containerBgImage}>
+    <WideImageAudioQuestionContainer bgImage={containerBgImage}>
       <WideImageAudioQuestionImage
-        $imageUrl={imageUrl}
+        imageUrl={imageUrl}
       ></WideImageAudioQuestionImage>
     </WideImageAudioQuestionContainer>
   )
 }
 
-const WideImageAudioQuestionContainer = styled.div<{ $bgImage: string }>`
+const WideImageAudioQuestionContainer = styled.div<{ bgImage: string }>`
   width: 100%;
   height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url(${({ $bgImage }) => $bgImage});
+  background-image: url(${({ bgImage }) => bgImage});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom 5px center;
 `
 
-const WideImageAudioQuestionImage = styled.div<{ $imageUrl: string }>`
+const WideImageAudioQuestionImage = styled.div<{ imageUrl: string }>`
   width: calc(100% - 150px);
   height: calc(100% - 180px);
-  background-image: url(${({ $imageUrl }) => $imageUrl});
+  background-image: url(${({ imageUrl }) => imageUrl});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

@@ -1,5 +1,5 @@
-import { IMAGES } from '@utils/ImageManager'
-import { ThemeType } from '@utils/SoundManager'
+import { Images } from '@utils/Assets'
+import { ThemeType } from '@interfaces/IThemeType'
 import styled from 'styled-components'
 import { useMemo } from 'react'
 
@@ -22,7 +22,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 export default function ShortTextOptions({
   options = ['a', 'b', 'c'],
   onOptionClick,
-  theme = 'baro', // 기본값 설정
+  theme = 'Baro', // 기본값 설정
 }: ShortTextOptionsProps) {
   // 옵션들을 랜덤 순서로 섞기
   const shuffledOptions = useMemo(() => {
@@ -38,8 +38,8 @@ export default function ShortTextOptions({
       {shuffledOptions.map((option, index) => (
         <ShortTextOption
           key={`${option}-${index}`}
-          $textLength={option.length}
-          $theme={theme}
+          textLength={option.length}
+          theme={theme}
           onClick={() => handleOptionClick(option, index)}
         >
           {option}
@@ -56,14 +56,14 @@ const ShortTextOptionsContainer = styled.div`
 `
 
 const ShortTextOption = styled.div<{
-  $textLength: number
-  $theme: ThemeType
+  textLength: number
+  theme: ThemeType
 }>`
   cursor: pointer;
   height: 200px;
   width: 320px;
   background-image: ${(props) =>
-    `url(${IMAGES.theme[props.$theme].quiz.options.optionBlankShort})`};
+    `url(${Images.Theme[props.theme as ThemeType].Quiz.optionBlankShort})`};
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -71,11 +71,11 @@ const ShortTextOption = styled.div<{
   justify-content: center;
   align-items: center;
   font-size: ${(props) =>
-    props.$textLength >= 9
+    props.textLength >= 9
       ? '2.5em'
-      : props.$textLength >= 7
+      : props.textLength >= 7
       ? '3em'
-      : props.$textLength >= 5
+      : props.textLength >= 5
       ? '3.5em'
       : '5em'};
   font-weight: 700;

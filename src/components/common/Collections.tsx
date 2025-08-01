@@ -1,5 +1,7 @@
 import styled from 'styled-components'
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
+
+import { ThemeType } from '@interfaces/IThemeType'
 
 interface CollectionsShowcaseProps {
   onClose: () => void
@@ -11,30 +13,30 @@ export function CollectionsShowcase({ onClose }: CollectionsShowcaseProps) {
       <div className="header">
         <div className="title">My Collections</div>
         <div className="close-button" onClick={onClose}>
-          <img src={IMAGES.common.button.closeQuizModal} alt="close" />
+          <img src={Images.Common.Button.btnCloseQuizModal} alt="close" />
         </div>
       </div>
 
       <div className="collection-boxes-container">
-        <CollectionBox character="baro" />
-        <CollectionBox character="chello" />
-        <CollectionBox character="millo" />
+        <CollectionBox character="Baro" />
+        <CollectionBox character="Chello" />
+        <CollectionBox character="Millo" />
       </div>
     </CollectionsShowcaseContainer>
   )
 }
 
 interface CollectionBoxProps {
-  character?: 'baro' | 'chello' | 'millo'
+  character?: ThemeType
   text?: string
   className?: string
 }
 
 export function CollectionBox({
-  character = 'baro',
+  character = 'Baro',
   className,
 }: CollectionBoxProps) {
-  const characterImage = IMAGES.common.collections.label.character[character]
+  const characterImage = Images.Common.Collections[`labelCharacter${character}`]
 
   // 현재 학습 예시
   const currentStudy = 'eb_pk_309'
@@ -65,9 +67,15 @@ export function CollectionBox({
         <RibbonText>{character.toUpperCase()}</RibbonText>
       </LabelContainer>
       <ItemsContainer>
-        {Object.keys(passingRequirement[character]).map((itemKey) => {
+        {Object.keys(
+          passingRequirement[
+            character.toLowerCase() as keyof typeof passingRequirement
+          ],
+        ).map((itemKey) => {
           const itemIndex = parseInt(itemKey) as 1 | 2 | 3
-          const requirement = passingRequirement[character][itemIndex]
+          const requirement = (passingRequirement as any)[
+            character.toLowerCase()
+          ][itemIndex]
           const passedCount = Object.values(requirement).filter(
             (value) => value === 'pass',
           ).length
@@ -91,8 +99,8 @@ export function CollectionBox({
                 {isCompleted ? (
                   <img
                     src={
-                      IMAGES.common.collections.badge.enable[character][
-                        itemIndex
+                      (Images.Common.Collections as any)[
+                        `badgeEnable${character}${itemIndex}`
                       ]
                     }
                     alt={character}
@@ -100,8 +108,8 @@ export function CollectionBox({
                 ) : (
                   <img
                     src={
-                      IMAGES.common.collections.badge.disable[character][
-                        itemIndex
+                      (Images.Common.Collections as any)[
+                        `badgeDisable${character}${itemIndex}`
                       ]
                     }
                     alt={character}
@@ -182,7 +190,7 @@ const CollectionsShowcaseContainer = styled.div`
 const CollectionsContainer = styled.div`
   width: 600px;
   height: 228px;
-  background-image: url(${IMAGES.common.collections.showcase});
+  background-image: url(${Images.Common.Collections.collectionShowcase});
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -257,7 +265,7 @@ const ItemBox = styled.div`
     transform: translateX(-50%);
     width: 100px;
     height: 80px;
-    background-image: url(${IMAGES.common.collections.pedestalLight});
+    background-image: url(${Images.Common.Collections.collectionPedestalLight});
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
@@ -314,7 +322,7 @@ const ItemBox = styled.div`
     left: 0;
     width: 100%;
     height: 44px;
-    background-image: url(${IMAGES.common.collections.pedestal});
+    background-image: url(${Images.Common.Collections.collectionPedestal});
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
@@ -346,7 +354,7 @@ const RibbonText = styled.div`
   display: flex;
   align-items: center;
   justify-content: start;
-  background-image: url(${IMAGES.common.collections.label.ribbon});
+  background-image: url(${Images.Common.Collections.labelRibbon});
   background-size: auto 60px;
   background-repeat: no-repeat;
   background-position: center right;

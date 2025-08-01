@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { IMAGES } from '@utils/ImageManager'
-import { ThemeType } from '@utils/SoundManager'
+import { Images } from '@utils/Assets'
+import { ThemeType } from '@interfaces/IThemeType'
 import styled from 'styled-components'
 
 // Fisher-Yates 셔플 알고리즘
@@ -22,7 +22,7 @@ interface SmallImageOptionsProps {
 export default function SmallImageOptions({
   options,
   onOptionClick,
-  theme = 'baro', // 기본값 설정
+  theme = 'Baro', // 기본값 설정
 }: SmallImageOptionsProps) {
   // 옵션들을 랜덤하게 섞기
   const shuffledOptions = useMemo(() => shuffleArray(options), [options])
@@ -32,7 +32,7 @@ export default function SmallImageOptions({
       {shuffledOptions.map((option) => (
         <SmallImageOption
           key={option}
-          $theme={theme}
+          theme={theme}
           onClick={() => onOptionClick(option)}
         >
           <div className="img-container">
@@ -50,12 +50,12 @@ const SmallImageOptionsContainer = styled.div`
   gap: 20px;
 `
 
-const SmallImageOption = styled.div<{ $theme: ThemeType }>`
+const SmallImageOption = styled.div<{ theme: ThemeType }>`
   cursor: pointer;
   height: 200px;
   width: 320px;
   background-image: ${(props) =>
-    `url(${IMAGES.theme[props.$theme].quiz.options.optionBlankShort})`};
+    `url(${Images.Theme[props.theme as ThemeType].Quiz.optionBlankShort})`};
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

@@ -1,100 +1,98 @@
-type IStep =
-  | 'intro'
-  | 'step1'
-  | 'step2'
-  | 'step3'
-  | 'step4'
-  | 'step5'
-  | 'reward'
-
 type IStudyModules =
   | 'Movie'
-  | 'AiSpeakPractice'
-  | 'ChooseImageByLetter'
-  | 'ChooseImageBySentence'
-  | 'ChooseLetterBySound'
-  | 'ChooseWordBySound'
-  | 'ChooseWordOrSentenceByImage'
-  | 'CompleteWordByPhoneme'
-  | 'MatchImageAndWord'
-  | 'MatchLetter1'
-  | 'MatchLetter2'
-  | 'MatchWordAndImage'
-  | 'OrderPhrasesByImage'
-  | 'TraceLetter'
-  | 'TypeWordBySound'
+  | 'ABCPictureMatch'
+  | 'ABCTracing'
+  | 'CompleteTheWord'
+  | 'FillTheWord1'
+  | 'FillTheWord2'
+  | 'FindTheMatch'
+  | 'LetterPairs'
+  | 'ListenAndMatch'
+  | 'MakeSentence'
+  | 'MatchTheMeaning1'
+  | 'MatchTheMeaning2'
+  | 'MatchTheSound1'
+  | 'MatchTheSound2'
+  | 'PictureMatch'
+  | 'PickTheLetter1'
+  | 'PickTheLetter2'
+  | 'PickTheSound'
+  | 'RhymeMatch1'
+  | 'RhymeMatch2'
+  | 'SpeakAndCheck'
+  | 'WordMatch'
 
 //매핑 테이블
 const STUDY_MODULE_MAP: Record<string, Record<number, IStudyModules>> = {
   alphabet_1: {
-    1: 'TraceLetter',
-    2: 'ChooseLetterBySound',
-    3: 'MatchLetter1',
-    4: 'ChooseLetterBySound',
-    5: 'ChooseImageByLetter',
+    1: 'ABCTracing',
+    2: 'PickTheLetter1',
+    3: 'LetterPairs',
+    4: 'PickTheLetter2',
+    5: 'ABCPictureMatch',
   },
   alphabet_2: {
-    1: 'TraceLetter',
-    2: 'ChooseLetterBySound',
-    3: 'MatchLetter2',
-    4: 'ChooseLetterBySound',
-    5: 'ChooseImageByLetter',
+    1: 'ABCTracing',
+    2: 'PickTheLetter1',
+    3: 'FindTheMatch',
+    4: 'PickTheLetter2',
+    5: 'ABCPictureMatch',
   },
   phonics1_1: {
-    1: 'CompleteWordByPhoneme',
-    2: 'CompleteWordByPhoneme',
-    3: 'MatchImageAndWord',
-    4: 'ChooseImageByLetter',
-    5: 'ChooseImageByLetter',
+    1: 'FillTheWord1',
+    2: 'FillTheWord2',
+    3: 'WordMatch',
+    4: 'RhymeMatch1',
+    5: 'RhymeMatch2',
   },
   phonics1_2: {
-    1: 'CompleteWordByPhoneme',
-    2: 'MatchImageAndWord',
-    3: 'MatchWordAndImage',
-    4: 'ChooseImageByLetter',
-    5: 'ChooseImageByLetter',
+    1: 'FillTheWord1',
+    2: 'PickTheSound',
+    3: 'PictureMatch',
+    4: 'RhymeMatch1',
+    5: 'RhymeMatch2',
   },
   phonics2_1: {
-    1: 'CompleteWordByPhoneme',
-    2: 'MatchImageAndWord',
-    3: 'MatchWordAndImage',
-    4: 'ChooseImageByLetter',
-    5: 'ChooseImageByLetter',
+    1: 'FillTheWord1',
+    2: 'FillTheWord2',
+    3: 'WordMatch',
+    4: 'MatchTheSound1',
+    5: 'MatchTheSound2',
   },
   phonics2_2: {
-    1: 'CompleteWordByPhoneme',
-    2: 'CompleteWordByPhoneme',
-    3: 'MatchImageAndWord',
-    4: 'ChooseImageByLetter',
-    5: 'ChooseImageByLetter',
+    1: 'FillTheWord1',
+    2: 'PickTheSound',
+    3: 'PictureMatch',
+    4: 'MatchTheSound1',
+    5: 'MatchTheSound2',
   },
   sightWords1_1: {
-    1: 'AiSpeakPractice',
-    2: 'ChooseWordBySound',
-    3: 'MatchImageAndWord',
-    4: 'ChooseImageBySentence',
-    5: 'OrderPhrasesByImage',
+    1: 'SpeakAndCheck',
+    2: 'ListenAndMatch',
+    3: 'WordMatch',
+    4: 'MatchTheMeaning1',
+    5: 'MakeSentence',
   },
   sightWords1_2: {
-    1: 'AiSpeakPractice',
-    2: 'ChooseWordBySound',
-    3: 'MatchImageAndWord',
-    4: 'ChooseWordOrSentenceByImage',
-    5: 'OrderPhrasesByImage',
+    1: 'SpeakAndCheck',
+    2: 'ListenAndMatch',
+    3: 'WordMatch',
+    4: 'MatchTheMeaning2',
+    5: 'MakeSentence',
   },
   sightWords2_1: {
-    1: 'AiSpeakPractice',
-    2: 'ChooseWordBySound',
-    3: 'MatchImageAndWord',
-    4: 'ChooseImageBySentence',
-    5: 'OrderPhrasesByImage',
+    1: 'SpeakAndCheck',
+    2: 'ListenAndMatch',
+    3: 'WordMatch',
+    4: 'MatchTheMeaning1',
+    5: 'MakeSentence',
   },
   sightWords2_2: {
-    1: 'AiSpeakPractice',
-    2: 'TypeWordBySound',
-    3: 'MatchImageAndWord',
-    4: 'ChooseWordOrSentenceByImage',
-    5: 'OrderPhrasesByImage',
+    1: 'SpeakAndCheck',
+    2: 'CompleteTheWord',
+    3: 'WordMatch',
+    4: 'MatchTheMeaning2',
+    5: 'MakeSentence',
   },
 }
 
@@ -106,5 +104,5 @@ const getStudyModule = (
   return STUDY_MODULE_MAP[studyType]?.[stepNumber] || 'Movie'
 }
 
-export type { IStep, IStudyModules }
+export type { IStudyModules }
 export { STUDY_MODULE_MAP, getStudyModule }

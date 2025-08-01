@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled from 'styled-components'
 import { useState } from 'react'
 
@@ -24,7 +24,7 @@ export default function TypingInputBox({
   )
 
   return (
-    <TypingInputBoxContainer $isShaking={isShaking}>
+    <TypingInputBoxContainer isShaking={isShaking}>
       <div className="letter-container">
         <div className="letter-text">
           {letters.map((letter, index) => (
@@ -47,8 +47,8 @@ export default function TypingInputBox({
   )
 }
 
-const TypingInputBoxContainer = styled.div<{ $isShaking: boolean }>`
-  background-image: url(${IMAGES.theme.baro.quiz.options.resShelfLong});
+const TypingInputBoxContainer = styled.div<{ isShaking: boolean }>`
+  background-image: url(${Images.Theme.Baro.Quiz.resShelfLong});
   background-size: calc(100% - 40px);
   background-position: top calc(100% + 20px) center;
   background-repeat: no-repeat;
@@ -57,8 +57,8 @@ const TypingInputBoxContainer = styled.div<{ $isShaking: boolean }>`
   display: flex;
   justify-content: center;
   align-items: start;
-  animation: ${({ $isShaking }) =>
-    $isShaking ? 'shake 0.5s ease-in-out' : 'none'};
+  animation: ${({ isShaking }) =>
+    isShaking ? 'shake 0.5s ease-in-out' : 'none'};
 
   @keyframes blink {
     0%,
@@ -99,7 +99,7 @@ const TypingInputBoxContainer = styled.div<{ $isShaking: boolean }>`
       font-size: 5em;
       font-weight: bold;
       color: rgba(26, 26, 26, 0.25);
-      background-image: url(${IMAGES.common.questionBg.short});
+      background-image: url(${Images.Common.QuestionBg.questionBgShort});
       background-size: 100%;
       background-position: center;
       background-repeat: no-repeat;

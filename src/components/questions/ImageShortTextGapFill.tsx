@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled from 'styled-components'
 
 interface ImageShortTextGapFillProps {
@@ -49,7 +49,7 @@ export default function ImageShortTextGapFill({
 }
 
 const ImageShortTextGapFillContainer = styled.div`
-  background-image: url(${IMAGES.theme.baro.quiz.options.resShelfLong});
+  background-image: url(${Images.Theme.Baro.Quiz.resShelfLong});
   background-size: calc(100% - 40px);
   background-position: top calc(100% + 20px) center;
   background-repeat: no-repeat;
@@ -65,7 +65,7 @@ const ImageShortTextGapFillContainer = styled.div`
     margin-left: auto;
 
     .quiz-image {
-      background-image: url(${IMAGES.common.questionBg.short});
+      background-image: url(${Images.Common.QuestionBg.questionBgShort});
       background-size: 100%;
       background-position: center;
       background-repeat: no-repeat;

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 
 interface StartButtonProps {
   onClick?: () => void
@@ -13,14 +13,14 @@ export default function StartButton({
   size = 'medium',
 }: StartButtonProps) {
   return (
-    <ButtonContainer onClick={onClick} className={className} $size={size} />
+    <ButtonContainer onClick={onClick} className={className} size={size} />
   )
 }
 
-const ButtonContainer = styled.button<{ $size: string }>`
+const ButtonContainer = styled.button<{ size: string }>`
   cursor: pointer;
   width: ${(props) => {
-    switch (props.$size) {
+    switch (props.size) {
       case 'small':
         return '180px'
       case 'large':
@@ -30,7 +30,7 @@ const ButtonContainer = styled.button<{ $size: string }>`
     }
   }};
   height: ${(props) => {
-    switch (props.$size) {
+    switch (props.size) {
       case 'small':
         return '60px'
       case 'large':
@@ -43,7 +43,7 @@ const ButtonContainer = styled.button<{ $size: string }>`
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease-in-out;
-  background-image: url(${IMAGES.common.button.start});
+  background-image: url(${Images.Common.Button.btnStart});
   background-size: auto 100%;
   background-repeat: no-repeat;
   background-position: center;

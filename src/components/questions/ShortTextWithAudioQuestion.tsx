@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled from 'styled-components'
 
 interface ShortTextWithAudioQuestionProps {
@@ -22,7 +22,7 @@ export default function ShortTextWithAudioQuestion({
 }
 
 const ShortTextWithAudioQuestionContainer = styled.div`
-  background-image: url(${IMAGES.theme.baro.quiz.options.resShelfLong});
+  background-image: url(${Images.Theme.Baro.Quiz.resShelfLong});
   background-size: calc(100% - 40px);
   background-position: top calc(100% + 20px) center;
   background-repeat: no-repeat;
@@ -40,7 +40,7 @@ const ShortTextWithAudioQuestionContainer = styled.div`
       font-size: 10em;
       font-weight: bold;
       color: #1a1a1a;
-      background-image: url(${IMAGES.common.questionBg.short});
+      background-image: url(${Images.Common.QuestionBg.questionBgShort});
       background-size: 100%;
       background-position: center;
       background-repeat: no-repeat;

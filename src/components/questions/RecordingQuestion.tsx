@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled from 'styled-components'
 
 export default function RecordingQuestion({
@@ -39,7 +39,7 @@ function RecordingQuestion1({ word = '' }: RecordingQuestion1Props) {
 }
 
 const RecordingQuestionContainer1 = styled.div`
-  background-image: url(${IMAGES.theme.baro.quiz.options.resShelfLong});
+  background-image: url(${Images.Theme.Baro.Quiz.resShelfLong});
   background-size: calc(100% - 40px);
   background-position: top calc(100% + 20px) center;
   background-repeat: no-repeat;
@@ -57,7 +57,7 @@ const RecordingQuestionContainer1 = styled.div`
       font-size: 5em;
       font-weight: bold;
       color: #1a1a1a;
-      background-image: url(${IMAGES.common.questionBg.short});
+      background-image: url(${Images.Common.QuestionBg.questionBgShort});
       background-size: 100%;
       background-position: center;
       background-repeat: no-repeat;
@@ -100,7 +100,7 @@ function RecordingQuestion2({
 }
 
 const RecordingQuestionContainer2 = styled.div`
-  background-image: url(${IMAGES.theme.baro.quiz.options.resShelfLong});
+  background-image: url(${Images.Theme.Baro.Quiz.resShelfLong});
   background-size: calc(100% - 40px);
   background-position: top calc(100% + 20px) center;
   background-repeat: no-repeat;

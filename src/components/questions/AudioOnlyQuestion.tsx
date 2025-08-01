@@ -1,7 +1,6 @@
-import styled from 'styled-components'
-import { IMAGES } from '@utils/ImageManager'
 import { useRef, useState, useEffect } from 'react'
-import { SoundManager } from '@utils/SoundManager'
+import styled from 'styled-components'
+import { Images } from '@utils/Assets'
 
 export default function AudioOnlyQuestion() {
   const objectRef = useRef<HTMLObjectElement>(null)
@@ -9,12 +8,11 @@ export default function AudioOnlyQuestion() {
 
   // SoundManager의 재생 상태 변경을 감지하는 리스너 등록
   useEffect(() => {
-    const unsubscribe = SoundManager.addPlayingStateListener((playing) => {
-      setIsPlayingAudio(playing)
-    })
-
+    // const unsubscribe = SoundManager.addPlayingStateListener((playing) => {
+    //   setIsPlayingAudio(playing)
+    // })
     // 컴포넌트 언마운트 시 리스너 해제
-    return unsubscribe
+    // return unsubscribe
   }, [])
 
   return (
@@ -23,7 +21,7 @@ export default function AudioOnlyQuestion() {
         {isPlayingAudio && (
           <object
             ref={objectRef}
-            data={IMAGES.common.button.radioCastPlay}
+            data={Images.Common.Button.btnRadiocastPlay}
             type="image/svg+xml"
             width="100%"
             className="object-position"
@@ -32,7 +30,7 @@ export default function AudioOnlyQuestion() {
         )}
         <object
           ref={objectRef}
-          data={IMAGES.common.button.radioCastStop}
+          data={Images.Common.Button.btnRadiocastStop}
           type="image/svg+xml"
           width="100%"
           className="object-position"

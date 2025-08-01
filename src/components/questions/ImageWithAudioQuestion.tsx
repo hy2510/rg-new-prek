@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled from 'styled-components'
 
 export default function ImageWithAudioQuestion({
@@ -18,7 +18,7 @@ export default function ImageWithAudioQuestion({
 }
 
 const ImageWithAudioQuestionContainer = styled.div`
-  background-image: url(${IMAGES.theme.baro.quiz.options.resShelfLong});
+  background-image: url(${Images.Theme.Baro.Quiz.resShelfLong});
   background-size: calc(100% - 40px);
   background-position: top calc(100% + 20px) center;
   background-repeat: no-repeat;
@@ -34,7 +34,7 @@ const ImageWithAudioQuestionContainer = styled.div`
 
     .image-wrapper {
       color: white;
-      background-image: url(${IMAGES.common.questionBg.short});
+      background-image: url(${Images.Common.QuestionBg.questionBgShort});
       background-size: 100%;
       background-position: center;
       background-repeat: no-repeat;

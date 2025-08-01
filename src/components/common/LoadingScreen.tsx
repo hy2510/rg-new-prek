@@ -17,7 +17,7 @@ export default function LoadingScreen({
         <LoadingSpinner />
         <LoadingTitle>Please wait...</LoadingTitle>
         {/* <ProgressBarContainer>
-          <ProgressBar $progress={progress} />
+          <ProgressBar progress={progress} />
           <ProgressText>{Math.round(progress)}%</ProgressText>
         </ProgressBarContainer> */}
         {/* <LoadingSubtitle>Please wait...</LoadingSubtitle> */}
@@ -86,8 +86,8 @@ const ProgressBarContainer = styled.div`
   overflow: hidden;
 `
 
-const ProgressBar = styled.div<{ $progress: number }>`
-  width: ${({ $progress }) => $progress}%;
+const ProgressBar = styled.div<{ progress: number }>`
+  width: ${({ progress }) => progress}%;
   height: 100%;
   background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
   border-radius: 20px;

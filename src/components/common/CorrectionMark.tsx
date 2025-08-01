@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useEffect, useMemo, useCallback } from 'react'
 import styled from 'styled-components'
-import { IMAGES } from '@utils/ImageManager'
-import { ThemeType } from '@utils/SoundManager'
+import { Images } from '@utils/Assets'
+import { ThemeType } from '@interfaces/IThemeType'
+import { TIMING } from '@constants/constant'
+import { useSoundContext } from '@contexts/SoundContext'
 
 type CorrectionType = 'correct' | 'incorrect'
 
@@ -13,31 +15,14 @@ interface CorrectionMarkProps {
   className?: string
 }
 
-// 타이밍 상수
-const TIMING = {
-  HIDE_DELAY: 1000, // 숨김 처리 지연 시간
-  OPACITY_TRANSITION: 300, // opacity 전환 시간
-  ANIMATION_DURATION: 600, // 애니메이션 지속 시간
-} as const
-
 export default function CorrectionMark({
   type,
-  theme = 'baro',
+  theme = 'Baro',
   isVisible,
   onAnimationEnd,
   className,
 }: CorrectionMarkProps) {
-  const [shouldRender, setShouldRender] = useState(false)
-
-  // 이미지 경로들을 메모이제이션
-  const imageSources = useMemo(
-    () => ({
-      front: IMAGES.common.correction[type].front,
-      back: IMAGES.common.correction[type].back,
-      character: IMAGES.theme[theme].quiz.correction[type],
-    }),
-    [type, theme],
-  )
+  const { audioList, playSound } = useSoundContext()
 
   // 접근성을 위한 alt 텍스트
   const altTexts = useMemo(
@@ -48,19 +33,6 @@ export default function CorrectionMark({
     }),
     [type],
   )
-
-  // 렌더링 상태 관리
-  useEffect(() => {
-    if (isVisible) {
-      setShouldRender(true)
-    } else {
-      const timer = setTimeout(() => {
-        setShouldRender(false)
-      }, TIMING.HIDE_DELAY)
-
-      return () => clearTimeout(timer)
-    }
-  }, [isVisible])
 
   // 이미지 로드 핸들러
   const handleImageLoad = useCallback(
@@ -79,56 +51,66 @@ export default function CorrectionMark({
     [type],
   )
 
-  // 렌더링하지 않을 때는 null 반환
-  if (!shouldRender) {
-    return null
-  }
+  useEffect(() => {
+    if (isVisible) {
+      playSound(
+        type === 'correct' ? audioList.correct : audioList.incorrect,
+        0,
+        0.25,
+      )
+    }
+  }, [isVisible])
 
   return (
     <>
-      <ScreenBlock $isVisible={isVisible} />
-      <CorrectionMarkContainer
-        $isVisible={isVisible}
-        $type={type}
-        onAnimationEnd={onAnimationEnd}
-        className={className}
-      >
-        {/* <CorrectionImage
-          src={imageSources.back}
-          alt={altTexts.back}
-          onLoad={() => handleImageLoad('back')}
-          onError={(e) => handleImageError('back', e)}
-        /> */}
-        <CorrectionImage
-          $isCharacter
-          src={imageSources.character}
-          alt={altTexts.character}
-          onLoad={() => handleImageLoad('character')}
-          onError={(e) => handleImageError('character', e)}
-        />
-        <CorrectionImage
-          src={imageSources.front}
-          alt={altTexts.front}
-          onLoad={() => handleImageLoad('front')}
-          onError={(e) => handleImageError('front', e)}
-        />
-      </CorrectionMarkContainer>
+      {!isVisible ? (
+        <></>
+      ) : (
+        <>
+          <ScreenBlock isVisible={isVisible} />
+
+          <CorrectionMarkContainer
+            isVisible={isVisible}
+            type={type}
+            onAnimationEnd={onAnimationEnd}
+            className={className}
+          >
+            <CorrectionImage
+              isCharacter
+              src={Images.Theme[theme].Quiz.correctionCorrectMarkCharacter}
+              alt={altTexts.character}
+              onLoad={() => handleImageLoad('character')}
+              onError={(e) => handleImageError('character', e)}
+            />
+            <CorrectionImage
+              src={
+                type === 'correct'
+                  ? Images.Common.CorrectionMark.correctionCorrectMarkFront
+                  : Images.Common.CorrectionMark.correctionIncorrectMarkFront
+              }
+              alt={altTexts.front}
+              onLoad={() => handleImageLoad('front')}
+              onError={(e) => handleImageError('front', e)}
+            />
+          </CorrectionMarkContainer>
+        </>
+      )}
     </>
   )
 }
 
-const ScreenBlock = styled.div<{ $isVisible: boolean }>`
+const ScreenBlock = styled.div<{ isVisible: boolean }>`
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9998;
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
-  transition: opacity ${TIMING.OPACITY_TRANSITION}ms ease-in-out;
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  transition: opacity ${TIMING.CORRECTION_MARK.OPACITY_TRANSITION}ms ease-in-out;
 `
 
 const CorrectionMarkContainer = styled.div<{
-  $isVisible: boolean
-  $type: CorrectionType
+  isVisible: boolean
+  type: CorrectionType
 }>`
   position: fixed;
   top: 50%;
@@ -137,14 +119,14 @@ const CorrectionMarkContainer = styled.div<{
   z-index: 9999;
   width: 300px;
   height: 300px;
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
-  transition: opacity ${TIMING.OPACITY_TRANSITION}ms ease-in-out;
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  transition: opacity ${TIMING.CORRECTION_MARK.OPACITY_TRANSITION}ms ease-in-out;
   pointer-events: none;
 
-  ${({ $isVisible, $type }) =>
-    $isVisible &&
-    `animation: ${$type === 'correct' ? 'correctPulse' : 'incorrectShake'} ${
-      TIMING.ANIMATION_DURATION
+  ${({ isVisible, type }) =>
+    isVisible &&
+    `animation: ${type === 'correct' ? 'correctPulse' : 'incorrectShake'} ${
+      TIMING.CORRECTION_MARK.ANIMATION_DURATION
     }ms ease-in-out;`}
 
   @keyframes correctPulse {
@@ -187,15 +169,15 @@ const CorrectionMarkContainer = styled.div<{
   }
 `
 
-const CorrectionImage = styled.img<{ $isCharacter?: boolean }>`
+const CorrectionImage = styled.img<{ isCharacter?: boolean }>`
   position: absolute;
   width: 100%;
   height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 
-  ${({ $isCharacter }) =>
-    $isCharacter
+  ${({ isCharacter }) =>
+    isCharacter
       ? `
         top: 50%;
         left: 50%;

@@ -1,16 +1,5 @@
+import { IQuizInfo } from '@interfaces/IStudyInfo'
 import { useState, useCallback, useEffect, useMemo } from 'react'
-import { SoundManager } from '@utils/SoundManager'
-
-// 퀴즈 데이터 타입
-export interface QuizItem {
-  questionImage?: string
-  question: string | string[]
-  options: string | string[]
-  correctAnswer: string | string[]
-  quizSound?: string
-  questionType?: keyof (typeof SoundManager)['QUESTION_SOUNDS_BASE']
-  recordQuestionType?: 'word' | 'sentence'
-}
 
 // 퀴즈 콜백 함수들 타입
 export interface QuizCallbacks {
@@ -33,14 +22,24 @@ export interface QuizOptions {
   playQuestionAudio?: boolean // 문제 변경 시 음성 재생 여부
   playResultAudio?: boolean // 결과 화면에서 음성 재생 여부
   resultAudioContent?: string // 결과 음성 내용 (기본값: resultText)
-  enableDevLogs?: boolean // 개발 로그 활성화 여부
+}
+
+type Quiz = {
+  QuizId: string
+  QuizNo: string
+  Question: string
+  CorrectText: string
+  ExampleCount: number
+  Options: string[]
+  Images: string[]
+  Sounds: string[]
 }
 
 // 커스텀 훅의 반환 타입
 export interface UseQuizLogicReturn {
-  currentQuestionIndex: number
   isCompleted: boolean
-  currentQuiz: QuizItem
+  currentQuestionIndex: number
+  currentQuiz: Quiz
   isLastQuestion: boolean
   resultText: string
   handleOptionClick: (selectedOption: string) => void
@@ -52,7 +51,7 @@ export interface UseQuizLogicReturn {
  * 퀴즈 공통 로직을 관리하는 커스텀 훅
  */
 export function useQuizLogic(
-  quizData: QuizItem[],
+  quizData: IQuizInfo['quiz'],
   callbacks: QuizCallbacks,
   options: QuizOptions = {},
 ): UseQuizLogicReturn {
@@ -60,7 +59,6 @@ export function useQuizLogic(
     playQuestionAudio = true,
     playResultAudio = true,
     resultAudioContent,
-    enableDevLogs = process.env.NODE_ENV === 'development',
   } = options
 
   const { onCorrect, onIncorrect, onComplete } = callbacks
@@ -70,14 +68,43 @@ export function useQuizLogic(
   const [isCompleted, setIsCompleted] = useState(false)
   const [isProcessingAnswer, setIsProcessingAnswer] = useState(false)
 
+  // 유틸리티 함수
+  const createDynamicArray = (data: any, prefix: string, count: number) => {
+    const array = []
+    for (let i = 1; i <= count; i++) {
+      const item = data[`${prefix}${i}`]
+      if (item) array.push(item)
+    }
+    return array
+  }
+
   // 메모이제이션된 값들
   const currentQuiz = useMemo(() => {
-    const quiz = quizData[currentQuestionIndex]
-    if (process.env.NODE_ENV === 'development' && !quiz) {
-      console.warn(
-        `⚠️ currentQuiz가 undefined입니다. 인덱스: ${currentQuestionIndex}, 배열 길이: ${quizData.length}`,
-      )
+    const currentQuizData = quizData[currentQuestionIndex]
+
+    const quiz = {
+      QuizId: currentQuizData.QuizId,
+      QuizNo: currentQuizData.QuizNo,
+      Question: currentQuizData.Question,
+      CorrectText: currentQuizData.CorrectText,
+      ExampleCount: currentQuizData.ExampleCount,
+      Options: createDynamicArray(
+        currentQuizData,
+        'Example',
+        currentQuizData.ExampleCount,
+      ),
+      Images: createDynamicArray(
+        currentQuizData,
+        'Image',
+        currentQuizData.ExampleCount,
+      ),
+      Sounds: createDynamicArray(
+        currentQuizData,
+        'Sound',
+        currentQuizData.ExampleCount,
+      ),
     }
+
     return quiz
   }, [quizData, currentQuestionIndex])
 
@@ -87,7 +114,7 @@ export function useQuizLogic(
   )
 
   const resultText = useMemo(
-    () => quizData.map((quiz) => quiz.question).join(''),
+    () => quizData.map((quiz) => quiz.CorrectText).join(''),
     [quizData],
   )
 
@@ -101,26 +128,16 @@ export function useQuizLogic(
     if (!playQuestionAudio) return
 
     const timer = setTimeout(() => {
-      if (currentQuiz.quizSound && currentQuiz.questionType) {
-        SoundManager.playQuestionSound(
-          currentQuiz.questionType,
-          currentQuiz.quizSound,
-        )
-      }
-
-      if (enableDevLogs) {
-        console.log(`재생 중인 파일명: ${currentQuiz.quizSound}`)
+      if (currentQuiz.Sounds[0]) {
+        // SoundManager.playQuestionSound(
+        //   currentQuiz.questionType,
+        //   currentQuiz.quizSound,
+        // )
       }
     }, QUIZ_TIMING.AUDIO_DELAY)
 
     return () => clearTimeout(timer)
-  }, [
-    currentQuestionIndex,
-    currentQuiz,
-    isCompleted,
-    playQuestionAudio,
-    enableDevLogs,
-  ])
+  }, [currentQuestionIndex, currentQuiz, isCompleted, playQuestionAudio])
 
   // 결과 화면에서 음원 재생
   useEffect(() => {
@@ -128,148 +145,76 @@ export function useQuizLogic(
 
     const timer = setTimeout(() => {
       const audioContent = resultAudioContent || resultText
-      SoundManager.playQuestionSound('default', audioContent)
-
-      if (enableDevLogs) {
-        console.log(`결과 화면 음성 재생: ${audioContent}`)
-      }
+      // SoundManager.playQuestionSound('default', audioContent)
     }, QUIZ_TIMING.RESULT_AUDIO_DELAY)
 
     return () => clearTimeout(timer)
-  }, [
-    isCompleted,
-    playResultAudio,
-    resultAudioContent,
-    resultText,
-    enableDevLogs,
-  ])
+  }, [isCompleted, playResultAudio, resultAudioContent, resultText])
 
   // 옵션 클릭 핸들러
   const handleOptionClick = useCallback(
     (selectedOption: string) => {
       if (isCompleted || isProcessingAnswer) {
-        if (enableDevLogs) {
-          console.log('🚫 handleOptionClick 무시됨:', {
-            isCompleted,
-            isProcessingAnswer,
-            selectedOption,
-          })
-        }
         return
-      }
-
-      if (enableDevLogs) {
-        console.log('🎯 handleOptionClick 시작:', selectedOption)
       }
 
       setIsProcessingAnswer(true)
 
       // 퀴즈 타입별 정답 검증 로직
       const isOrderPhrasesQuiz =
-        Array.isArray(currentQuiz.question) &&
-        Array.isArray(currentQuiz.options) &&
-        currentQuiz.question.some((item) => item === '') &&
-        currentQuiz.options.length >= 2 && // OrderPhrases는 2개 이상의 단어 조각
-        typeof currentQuiz.options[0] === 'string' &&
-        currentQuiz.options[0].length > 1 && // 단일 글자가 아닌 단어들
-        (currentQuiz.question.length >= 3 || // 문장이 3개 이상의 부분으로 구성 또는
-          currentQuiz.question.some((item) => item.length > 2)) // 고정 텍스트가 2글자 이상
+        Array.isArray(currentQuiz.Question) &&
+        Array.isArray(currentQuiz.Options) &&
+        currentQuiz.Question.some((item) => item === '') &&
+        currentQuiz.Options.length >= 2 && // OrderPhrases는 2개 이상의 단어 조각
+        typeof currentQuiz.Options[0] === 'string' &&
+        currentQuiz.Options[0].length > 1 && // 단일 글자가 아닌 단어들
+        (currentQuiz.Question.length >= 3 || // 문장이 3개 이상의 부분으로 구성 또는
+          currentQuiz.Question.some((item) => item.length > 2)) // 고정 텍스트가 2글자 이상
 
       const isCompleteWordQuiz =
-        Array.isArray(currentQuiz.question) &&
-        Array.isArray(currentQuiz.options) &&
-        currentQuiz.question.some((item) => item === '') &&
-        currentQuiz.options.length <= 3 && // CompleteWord는 보통 2-3개의 글자 선택지
-        typeof currentQuiz.options[0] === 'string' &&
-        currentQuiz.options[0].length === 1 // CompleteWord의 options는 단일 글자
+        Array.isArray(currentQuiz.Question) &&
+        Array.isArray(currentQuiz.Options) &&
+        currentQuiz.Question.some((item) => item === '') &&
+        currentQuiz.Options.length <= 3 && // CompleteWord는 보통 2-3개의 글자 선택지
+        typeof currentQuiz.Options[0] === 'string' &&
+        currentQuiz.Options[0].length === 1 // CompleteWord의 options는 단일 글자
 
       const isTypingQuiz =
-        typeof currentQuiz.question === 'string' &&
-        Array.isArray(currentQuiz.options) &&
-        currentQuiz.options.length === 0 &&
-        currentQuiz.correctAnswer === currentQuiz.question // 타이핑 퀴즈는 question과 correctAnswer가 동일
+        typeof currentQuiz.Question === 'string' &&
+        Array.isArray(currentQuiz.Options) &&
+        currentQuiz.Options.length === 0 &&
+        currentQuiz.CorrectText === currentQuiz.Question // 타이핑 퀴즈는 question과 correctAnswer가 동일
 
       let isCorrect: boolean
 
-      if (enableDevLogs) {
-        console.log('🔍 퀴즈 타입 감지:', {
-          question: currentQuiz.question,
-          options: currentQuiz.options,
-          isOrderPhrasesQuiz,
-          isCompleteWordQuiz,
-          isTypingQuiz,
-        })
-      }
-
       if (isOrderPhrasesQuiz) {
         // OrderPhrasesByImage: options 순서와 비교
-        const correctOrder = (currentQuiz.options as string[]).join(' ')
+        const correctOrder = (currentQuiz.Options as string[]).join(' ')
         isCorrect = selectedOption === correctOrder
-        if (enableDevLogs) {
-          console.log(
-            `OrderPhrases 퀴즈 정답 검증: "${selectedOption}" vs "${correctOrder}" (options 순서) = ${isCorrect}`,
-          )
-        }
       } else if (isCompleteWordQuiz) {
         // CompleteWordByPhoneme: correctAnswer와 비교
-        isCorrect = selectedOption === currentQuiz.correctAnswer
-        if (enableDevLogs) {
-          console.log(
-            `CompleteWord 퀴즈 정답 검증: "${selectedOption}" vs "${currentQuiz.correctAnswer}" = ${isCorrect}`,
-          )
-        }
+        isCorrect = selectedOption === currentQuiz.CorrectText
       } else if (isTypingQuiz) {
         // TypeWordBySound: 완성된 단어가 정답과 일치하는지 확인
-        isCorrect = selectedOption === currentQuiz.correctAnswer
-        if (enableDevLogs) {
-          console.log(
-            `Typing 퀴즈 정답 검증: "${selectedOption}" vs "${currentQuiz.correctAnswer}" = ${isCorrect}`,
-          )
-          console.log('타이핑 퀴즈 상세 정보:', {
-            question: currentQuiz.question,
-            selectedOption,
-            correctAnswer: currentQuiz.correctAnswer,
-            isTypingQuizDetected: isTypingQuiz,
-          })
-        }
+        isCorrect = selectedOption === currentQuiz.CorrectText
       } else {
         // 기존 퀴즈들의 정답 비교 로직 (options[0]과 비교)
-        isCorrect = selectedOption === currentQuiz.options[0]
-        if (enableDevLogs) {
-          console.log(
-            `일반 퀴즈 정답 검증: "${selectedOption}" vs "${currentQuiz.options[0]}" = ${isCorrect}`,
-          )
-        }
+        isCorrect = selectedOption === currentQuiz.Options[0]
       }
 
       if (isCorrect) {
         onCorrect?.()
 
-        if (enableDevLogs) {
-          console.log(`정답! 선택: ${selectedOption}`)
-        }
-
-        if (enableDevLogs) {
-          console.log(
-            `현재 문제 인덱스: ${currentQuestionIndex}, 전체 문제 수: ${quizData.length}, 마지막 문제 여부: ${isLastQuestion}`,
-          )
-        }
-
         if (isLastQuestion) {
           setTimeout(() => {
             setIsCompleted(true)
             setIsProcessingAnswer(false)
-            if (enableDevLogs) {
-              console.log('퀴즈 완료!')
-            }
           }, QUIZ_TIMING.CORRECT_NEXT)
         } else {
           setTimeout(() => {
             setCurrentQuestionIndex((prev) => {
               const nextIndex = prev + 1
-              if (enableDevLogs) {
-                console.log(`다음 문제로 이동: ${nextIndex} (현재: ${prev})`)
-              }
+
               return nextIndex
             })
             setIsProcessingAnswer(false)
@@ -279,23 +224,13 @@ export function useQuizLogic(
         onIncorrect?.()
         setIsProcessingAnswer(false) // 오답 시 즉시 처리 상태 해제
 
-        if (enableDevLogs) {
-          console.log(
-            `오답! 선택: ${selectedOption}, 정답: ${currentQuiz.correctAnswer}`,
-          )
-        }
-
         // 틀렸을 때 문제 음성 자동 재생
-        if (currentQuiz.quizSound && currentQuiz.questionType) {
+        if (currentQuiz.Sounds[0]) {
           setTimeout(() => {
-            SoundManager.playQuestionSound(
-              currentQuiz.questionType!,
-              currentQuiz.quizSound!,
-            )
-
-            if (enableDevLogs) {
-              console.log(`오답 후 음성 재생: ${currentQuiz.quizSound}`)
-            }
+            // SoundManager.playQuestionSound(
+            //   currentQuiz.questionType!,
+            //   currentQuiz.quizSound!,
+            // )
           }, 1500) // 오답 처리 후 약간의 딜레이
         }
       }
@@ -308,7 +243,6 @@ export function useQuizLogic(
       currentQuestionIndex,
       onCorrect,
       onIncorrect,
-      enableDevLogs,
       quizData.length,
     ],
   )
@@ -334,11 +268,7 @@ export function useQuizLogic(
 
     // 완료 처리만 수행, 팝업 닫힘은 별도 처리
     onComplete?.()
-
-    if (enableDevLogs) {
-      console.log('퀴즈 완료! onComplete 호출됨')
-    }
-  }, [isCompleted, onComplete, enableDevLogs])
+  }, [isCompleted, onComplete])
 
   // 제목 생성 유틸리티 함수들
   const getQuizTitle = useCallback(

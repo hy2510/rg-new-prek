@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled from 'styled-components'
 
 interface SentenceListeningQuestionProps {
@@ -22,7 +22,7 @@ export default function SentenceListeningQuestion({
 }
 
 const SentenceListeningQuestionContainer = styled.div`
-  background-image: url(${IMAGES.theme.baro.quiz.options.resShelfLong});
+  background-image: url(${Images.Theme.Baro.Quiz.resShelfLong});
   background-size: calc(100% - 40px);
   background-position: top calc(100% + 20px) center;
   background-repeat: no-repeat;
@@ -40,7 +40,7 @@ const SentenceListeningQuestionContainer = styled.div`
       font-size: 2.5em;
       font-weight: bold;
       color: #1a1a1a;
-      background-image: url(${IMAGES.common.questionBg.long});
+      background-image: url(${Images.Common.QuestionBg.questionBgLong});
       background-size: 100%;
       background-position: center;
       background-repeat: no-repeat;

@@ -1,4 +1,4 @@
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import styled, { css } from 'styled-components'
 
 interface ImageSentenceGapFillProps {
@@ -8,12 +8,12 @@ interface ImageSentenceGapFillProps {
 
 export default function ImageSentenceGapFill({
   imageUrl = 'https://wcfresource.a1edu.com/newsystem/image/dodoabc/sightword/words/whatsyourname.png',
-  containerBgImage = IMAGES.theme.baro.quiz.options.resShelfShort,
+  containerBgImage = Images.Theme.Baro.Quiz.resShelfShort,
 }: ImageSentenceGapFillProps) {
   return (
-    <ImageSentenceGapFillContainer $bgImage={containerBgImage}>
+    <ImageSentenceGapFillContainer bgImage={containerBgImage}>
       <ImageSentenceGapFillImage
-        $imageUrl={`https://wcfresource.a1edu.com/newsystem/image/dodoabc/sightword/words/${imageUrl}.png`}
+        imageUrl={`https://wcfresource.a1edu.com/newsystem/image/dodoabc/sightword/words/${imageUrl}.png`}
       />
     </ImageSentenceGapFillContainer>
   )
@@ -44,24 +44,24 @@ export function GapFill({ items = ['', 'I am', ''] }: GapFillProps) {
   )
 }
 
-const ImageSentenceGapFillContainer = styled.div<{ $bgImage: string }>`
+const ImageSentenceGapFillContainer = styled.div<{ bgImage: string }>`
   width: 100%;
   height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url(${({ $bgImage }) => $bgImage});
+  background-image: url(${({ bgImage }) => bgImage});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom 5px center;
   position: relative;
 `
 
-const ImageSentenceGapFillImage = styled.div<{ $imageUrl: string }>`
+const ImageSentenceGapFillImage = styled.div<{ imageUrl: string }>`
   width: calc(100% - 150px);
   height: calc(100% - 180px);
-  background-image: url(${({ $imageUrl }) => $imageUrl});
+  background-image: url(${({ imageUrl }) => imageUrl});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

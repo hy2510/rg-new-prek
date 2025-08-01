@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ThemeType, ThemeNumber } from '@utils/SoundManager'
+import { ThemeType } from '@interfaces/IThemeType'
 
 interface QuizContainerProps {
   bgImage: string
@@ -9,7 +9,7 @@ interface QuizContainerProps {
   style?: React.CSSProperties
   quizTitle?: string
   theme?: ThemeType
-  themeNumber?: ThemeNumber
+  themeNumber?: number
   showThemeInfo?: boolean
 }
 
@@ -23,7 +23,7 @@ const StyledQuizContainer = styled.div<QuizContainerProps>`
   width: 100%;
   height: 100%;
   background-image: url(${(props) => props.bgImage});
-  background-size: auto 100%;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;

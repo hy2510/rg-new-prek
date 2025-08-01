@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { IMAGES } from '@utils/ImageManager'
-import { ThemeType } from '@utils/SoundManager'
+import { Images } from '@utils/Assets'
+import { ThemeType } from '@interfaces/IThemeType'
 import styled from 'styled-components'
 
 interface LongTextOptionsProps {
@@ -26,7 +26,7 @@ export default function LongTextOptions({
   options = [`My Name is Gino.`, `What's your name?`, `I'm a teacher.`],
   onOptionClick,
   disabledOptions = [],
-  theme = 'baro', // 기본값 설정
+  theme = 'Baro', // 기본값 설정
 }: LongTextOptionsProps) {
   // 옵션들을 랜덤하게 섞어서 메모이제이션
   const shuffledOptions = useMemo(() => shuffleArray(options), [options])
@@ -38,9 +38,9 @@ export default function LongTextOptions({
         return (
           <LongTextOption
             key={option}
-            $textLength={option.length}
-            $isDisabled={isDisabled}
-            $theme={theme}
+            textLength={option.length}
+            isDisabled={isDisabled}
+            theme={theme}
             onClick={() => !isDisabled && onOptionClick?.(option)}
           >
             {option}
@@ -63,35 +63,35 @@ const LongTextOptionsContainer = styled.div`
 `
 
 const LongTextOption = styled.div<{
-  $textLength: number
-  $isDisabled?: boolean
-  $theme: ThemeType
+  textLength: number
+  isDisabled?: boolean
+  theme: ThemeType
 }>`
-  cursor: ${(props) => (props.$isDisabled ? 'not-allowed' : 'pointer')};
+  cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
   height: 90px;
   width: 100%;
   background-image: ${(props) =>
-    `url(${IMAGES.theme[props.$theme].quiz.options.optionBlankLong})`};
+    `url(${Images.Theme[props.theme as ThemeType].Quiz.optionBlankLong})`};
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: ${(props) => (props.$textLength >= 15 ? '1.8em' : '2.25em')};
+  font-size: ${(props) => (props.textLength >= 15 ? '1.8em' : '2.25em')};
   font-weight: 700;
-  color: ${(props) => (props.$isDisabled ? '#999' : '#fff')};
+  color: ${(props) => (props.isDisabled ? '#999' : '#fff')};
   text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.8), 2px -2px 0 rgba(0, 0, 0, 0.8),
     -2px 2px 0 rgba(0, 0, 0, 0.8), 2px 2px 0 rgba(0, 0, 0, 0.8);
 
   transition: transform 0.2s ease-in-out;
-  opacity: ${(props) => (props.$isDisabled ? 0.5 : 1)};
+  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
 
   &:active {
-    transform: ${(props) => (props.$isDisabled ? 'none' : 'scale(0.95)')};
+    transform: ${(props) => (props.isDisabled ? 'none' : 'scale(0.95)')};
   }
 
   &:hover {
-    opacity: ${(props) => (props.$isDisabled ? 0.5 : 0.9)};
+    opacity: ${(props) => (props.isDisabled ? 0.5 : 0.9)};
   }
 `

@@ -11,9 +11,9 @@
  * 실제 구현시에는 이 파일을 참고하여 새로운 퀴즈 모듈을 만드세요.
  */
 
-import { ThemeType, ThemeNumber } from '@utils/SoundManager'
+import { ThemeType } from '@interfaces/IThemeType'
 import QuizContainer, { QuizBody } from '@components/common/QuizContainer'
-import { IMAGES } from '@utils/ImageManager'
+import { Images } from '@utils/Assets'
 import ShortTextOptions from '@components/options/ShortTextOptions'
 import ShortTextWithAudioQuestion from '@components/questions/ShortTextWithAudioQuestion'
 import QuizResultScreen from '@components/common/QuizResultScreen'
@@ -23,7 +23,7 @@ import PlayAudioButton from '@components/common/PlayAudioButton'
 // === 1. Props 타입 정의 ===
 type ExampleQuizProps = QuizCallbacks & {
   theme?: ThemeType
-  themeNumber?: ThemeNumber
+  themeNumber?: number
   audioLetter?: string // SubViewContainer에서 전달되는 오디오 파라미터
 }
 
@@ -65,7 +65,7 @@ export default function ExampleQuiz({
   onCorrect,
   onIncorrect,
   onComplete,
-  theme = 'baro',
+  theme = 'Baro',
   themeNumber = 1,
   audioLetter,
 }: ExampleQuizProps) {
@@ -84,7 +84,6 @@ export default function ExampleQuiz({
       playQuestionAudio: true, // 문제 변경 시 음성 자동 재생
       playResultAudio: true, // 결과 화면에서 음성 재생
       resultAudioContent: QUIZ_CONFIG.RESULT_AUDIO, // 커스텀 결과 음성
-      enableDevLogs: process.env.NODE_ENV === 'development', // 개발 환경에서만 로그
     },
   )
 
@@ -137,7 +136,7 @@ export default function ExampleQuiz({
   // === 7. 일반 퀴즈 화면 렌더링 ===
   return (
     <QuizContainer
-      bgImage={IMAGES.theme[theme].quiz.background.quizBg}
+      bgImage={Images.Theme[theme].Quiz.quizBg}
       quizTitle={getQuizTitle(QUIZ_CONFIG.BASE_TITLE)}
       theme={theme}
       themeNumber={themeNumber}

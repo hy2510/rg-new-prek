@@ -1,5 +1,5 @@
-import { IMAGES } from '@utils/ImageManager'
-import { ThemeType } from '@utils/SoundManager'
+import { Images } from '@utils/Assets'
+import { ThemeType } from '@interfaces/IThemeType'
 import styled from 'styled-components'
 import { useMemo } from 'react'
 
@@ -12,7 +12,7 @@ interface TypingKeyButtonProps {
 export default function TypingKeyButton({
   word = '',
   onLetterClick,
-  theme = 'baro', // 기본값 설정
+  theme = 'Baro', // 기본값 설정
 }: TypingKeyButtonProps) {
   const letters = useMemo(() => {
     // word를 문자열로 변환하고 중복 제거
@@ -45,7 +45,7 @@ export default function TypingKeyButton({
       {letters.map((letter, index) => (
         <TypingKeyButtonItem
           key={index}
-          $theme={theme}
+          theme={theme}
           onClick={() => onLetterClick?.(letter)}
         >
           {letter}
@@ -61,12 +61,12 @@ const TypingKeyButtonContainer = styled.div`
   gap: 10px;
 `
 
-const TypingKeyButtonItem = styled.div<{ $theme: ThemeType }>`
+const TypingKeyButtonItem = styled.div<{ theme: ThemeType }>`
   cursor: pointer;
   height: 150px;
   width: 150px;
   background-image: ${(props) =>
-    `url(${IMAGES.theme[props.$theme].quiz.options.optionBlankKey})`};
+    `url(${Images.Theme[props.theme as ThemeType].Quiz.optionBlankKey})`};
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

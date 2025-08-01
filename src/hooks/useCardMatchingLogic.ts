@@ -1,4 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
+import { TIMING } from '@constants/constant'
+
 import { QuizCallbacks } from './useQuizLogic'
 
 // 타입 정의
@@ -26,14 +28,6 @@ export interface UseCardMatchingLogicReturn {
   handleCardClick: (cardId: string) => void
 }
 
-// 타이밍 상수
-const CARD_TIMING = {
-  SHOW_DURATION: 3000,
-  FLIP_DELAY: 1000,
-  MATCH_DELAY: 500,
-  COMPLETE_DELAY: 3000,
-} as const
-
 /**
  * 카드 매칭 게임 로직을 관리하는 커스텀 훅
  */
@@ -42,7 +36,7 @@ export function useCardMatchingLogic(
   callbacks: QuizCallbacks,
   options: CardMatchingOptions = {},
 ): UseCardMatchingLogicReturn {
-  const { showDuration = CARD_TIMING.SHOW_DURATION } = options
+  const { showDuration = TIMING.CARD_MATCHING.SHOW_DURATION } = options
   const { onCorrect, onIncorrect, onComplete } = callbacks
 
   // 카드 데이터 초기화
@@ -114,13 +108,13 @@ export function useCardMatchingLogic(
       console.log('🎯 게임 완료 감지! onComplete 호출 예정:', {
         matchedPairs,
         totalPairs,
-        delay: CARD_TIMING.COMPLETE_DELAY,
+        delay: TIMING.CARD_MATCHING.COMPLETE_DELAY,
       })
 
       const timer = setTimeout(() => {
         console.log('🎉 onComplete() 호출!')
         onComplete?.()
-      }, CARD_TIMING.COMPLETE_DELAY)
+      }, TIMING.CARD_MATCHING.COMPLETE_DELAY)
 
       return () => clearTimeout(timer)
     }
@@ -210,7 +204,7 @@ export function useCardMatchingLogic(
           }
 
           setSelectedCards([])
-        }, CARD_TIMING.MATCH_DELAY)
+        }, TIMING.CARD_MATCHING.MATCH_DELAY)
       }
     },
     [cards, selectedCards, gamePhase, onCorrect, onIncorrect, checkMatch],
